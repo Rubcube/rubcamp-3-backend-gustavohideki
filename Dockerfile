@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 # COPY .env
-COPY .env.docker.example .env
+# COPY .env.docker.example .env
 
 # Install app dependencies
 RUN yarn install
