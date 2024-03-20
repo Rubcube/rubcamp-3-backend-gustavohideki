@@ -12,30 +12,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                      Int     @id @default(autoincrement())
-  full_name               String
-  email                   String @unique
-  phone                   String
-  cpf                     String @unique
-  password                String
-  transaction_password    String
-  created_at              DateTime @default(now())
-  updated_at              DateTime?
-  address                 Address[]
+model Usuario {
+  id Int @id @default(autoincrement())
+  usu_cadastro String @id @unique
+  usu_nome String
+  usu_email String
+  usu_telefone String
+  usu_dtNasc DateTime
+  usu_senha String
+  Endereco_cliente Endereco_cliente @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  Conta Conta @relation(fields: [usu_cadastro], references: [usu_cadastro])
 }
 
-model Address {
-  id            Int   @id @default(autoincrement())
-  user          User @relation(fields: [userId], references: [id])
-  userId        Int
-  cep           String
-  street        String
-  number        String
-  complement    String
-  neighborhood  String
-  city          String
-  state         String
-  created_at    DateTime @default(now())
-  updated_at    DateTime?
+model Endereco_cliente {
+  usu_cadastro String @id
+  end_cep String
+  end_rua String
+  end_num Int
+  end_bairro String
+  end_cidade String
+  end_uf String
+  end_complemento String?
+  Usuario Usuario @relation(fields: [usu_cadastro], references: [usu_cadastro])
+}
+
+model Conta {
+  usu_cadastro String @unique
+  con_id Int @id @unique
+  con_num Int
+  con_agencia String
+  con_tipo String
+  con_extrato Float
+  con_senha Int
+  Usuario Usuario @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  Agencia Agencia @relation(fields: [con_id], references: [con_id])
+  Transferencia Transferencia @relation("Remetente", fields: [con_id], references: [trans_remetente]) @relation("Destinatario", fields: [id], references: [trans_destinatario])
+  Transferencia Transferencia @relation("Destinatario", fields: [id], references: [trans_destinatario])
+}
+
+model Agencia {
+  con_id Int
+  age_num Int
+  age_nome String @id @unique
+  Conta Conta @relation(fields: [con_id], references: [con_id])
+}
+
+model Transferencia {
+  trans_id Int @id @unique
+  trans_remetente Int
+  trans_destinatario Int
+  trans_val Float
+  trans_dtTrans DateTime
+  Conta Conta @relation(fields: [trans_remetente, trans_destinatario], references: [con_id])
 }
