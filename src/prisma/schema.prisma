@@ -9,59 +9,60 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://rubcamp:rubcamp123@localhost:5432/rubcamp?schema=public&connection_timeout=300"  //env("DATABASE_URL")
 }
+
 
 model Usuario {
-  id Int @id @default(autoincrement())
-  usu_cadastro String @id @unique
-  usu_nome String
-  usu_email String
+  usu_cadastro String   @id @unique 
+  usu_nome     String
+  usu_email    String
   usu_telefone String
-  usu_dtNasc DateTime
-  usu_senha String
-  Endereco_cliente Endereco_cliente @relation(fields: [usu_cadastro], references: [usu_cadastro])
-  Conta Conta @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  usu_dtNasc   DateTime
+  usu_senha    String
+  endereco     Endereco[]
+  contas       Conta?
 }
 
-model Endereco_cliente {
-  usu_cadastro String @id
-  end_cep String
-  end_rua String
-  end_num Int
-  end_bairro String
-  end_cidade String
-  end_uf String
+model Endereco {
+  usu_cadastro   String    @id @unique 
+  end_cep        String
+  end_rua        String
+  end_num        Int
+  end_bairro     String
+  end_cidade     String
+  end_uf         String
   end_complemento String?
-  Usuario Usuario @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  usuario        Usuario   @relation(fields: [usu_cadastro], references: [usu_cadastro])
 }
 
 model Conta {
-  usu_cadastro String @unique
-  con_id Int @id @unique
-  con_num Int
-  con_agencia String
-  con_tipo String
-  con_extrato Float
-  con_senha Int
-  Usuario Usuario @relation(fields: [usu_cadastro], references: [usu_cadastro])
-  Agencia Agencia @relation(fields: [con_id], references: [con_id])
-  Transferencia Transferencia @relation("Remetente", fields: [con_id], references: [trans_remetente]) @relation("Destinatario", fields: [id], references: [trans_destinatario])
-  Transferencia Transferencia @relation("Destinatario", fields: [id], references: [trans_destinatario])
+  usu_cadastro String       @id @unique
+  con_id       Int          @default(autoincrement()) @unique
+  con_num      Int
+  con_agencia  String
+  con_tipo     String
+  con_extrato  Float
+  con_senha    Int
+  usuario      Usuario      @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  agencia      Agencia?
+  transferenciasRemetente   Transferencia[] @relation("Remetente")
+  transferenciasDestinatario Transferencia[] @relation("Destinatario")
 }
 
 model Agencia {
-  con_id Int
-  age_num Int
-  age_nome String @id @unique
-  Conta Conta @relation(fields: [con_id], references: [con_id])
+  con_id    Int    @unique
+  age_num   BigInt
+  age_nome  String @id @unique
+  conta     Conta @relation(fields: [con_id], references: [con_id])
 }
 
 model Transferencia {
-  trans_id Int @id @unique
-  trans_remetente Int
+  trans_id         Int      @id @unique
+  trans_remetente  Int
   trans_destinatario Int
-  trans_val Float
-  trans_dtTrans DateTime
-  Conta Conta @relation(fields: [trans_remetente, trans_destinatario], references: [con_id])
+  trans_val        Float
+  trans_dtTrans    DateTime
+  remetente        Conta    @relation("Remetente", fields: [trans_remetente], references: [con_id])
+  destinatario     Conta    @relation("Destinatario", fields: [trans_destinatario], references: [con_id])
 }
