@@ -9,7 +9,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://rubcamp:rubcamp123@localhost:5432/rubcamp?schema=public&connection_timeout=300"  //env("DATABASE_URL")
+  url      = "postgresql://rubcamp:rubcamp123@db:5432/rubcamp?schema=public&connection_timeout=300"  //env("DATABASE_URL")
 }
 
 
@@ -43,7 +43,7 @@ model Conta {
   con_agencia  String
   con_tipo     String
   con_extrato  Float
-  con_senha    Int
+  con_senha    BigInt
   usuario      Usuario      @relation(fields: [usu_cadastro], references: [usu_cadastro])
   agencia      Agencia?
   transferenciasRemetente   Transferencia[] @relation("Remetente")

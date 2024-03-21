@@ -27,6 +27,7 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3344:3344
+      - 5555:5555
     networks:
       - rubcamp
     links:
@@ -36,6 +37,8 @@ services:
     platform: "linux/amd64"
     depends_on:
       - db
+    expose:
+      - 5555
 
 networks:
   rubcamp:
