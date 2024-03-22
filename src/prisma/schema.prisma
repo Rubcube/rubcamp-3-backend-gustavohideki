@@ -54,11 +54,11 @@ model Agencia {
   con_id    Int    @unique
   age_num   BigInt
   age_nome  String @id @unique
-  conta     Conta @relation(fields: [con_id], references: [con_id])
+  conta     Conta? @relation(fields: [con_id], references: [con_id])
 }
 
 model Transferencia {
-  trans_id         Int      @id @unique
+  trans_id         Int      @id @unique @default(autoincrement())
   trans_remetente  Int
   trans_destinatario Int
   trans_val        Float
