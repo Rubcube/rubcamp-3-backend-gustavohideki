@@ -25,10 +25,11 @@ model Usuario {
 }
 
 model Endereco {
-  usu_cadastro   String    @id @unique 
+  end_id         Int       @id @unique @default(autoincrement())
+  usu_cadastro   String    
   end_cep        String
   end_rua        String
-  end_num        Int
+  end_num        String
   end_bairro     String
   end_cidade     String
   end_uf         String
@@ -40,7 +41,6 @@ model Conta {
   usu_cadastro String       @id @unique
   con_id       Int          @default(autoincrement()) @unique
   con_num      Int
-  con_agencia  String
   con_tipo     String
   con_extrato  Float
   con_senha    BigInt
@@ -62,7 +62,7 @@ model Transferencia {
   trans_remetente  Int
   trans_destinatario Int
   trans_val        Float
-  trans_dtTrans    DateTime
+  trans_dtTrans    DateTime 
   remetente        Conta    @relation("Remetente", fields: [trans_remetente], references: [con_id])
   destinatario     Conta    @relation("Destinatario", fields: [trans_destinatario], references: [con_id])
 }
