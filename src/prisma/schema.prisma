@@ -1,70 +1,68 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets = ["native", "darwin", "darwin-arm64", "linux-musl", "debian-openssl-1.1.x", "darwin"]
+  provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
+  binaryTargets   = ["native", "darwin", "darwin-arm64", "linux-musl", "debian-openssl-1.1.x", "darwin"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://rubcamp:rubcamp123@db:5432/rubcamp?schema=public&connection_timeout=300"  //env("DATABASE_URL")
+  url      = "postgresql://rubcamp:rubcamp123@db:5432/rubcamp?schema=public&connection_timeout=300"
 }
 
-
 model Usuario {
-  usu_cpf      String   @id @unique 
   usu_nome     String
   usu_email    String
   usu_telefone String
   usu_dtNasc   DateTime
   usu_senha    String
-  endereco     Endereco[]
+  usu_cpf      String     @id @unique
   contas       Conta?
+  endereco     Endereco[]
 }
 
 model Endereco {
-  end_id         Int       @id @unique @default(autoincrement())
-  usu_cpf   String
-  end_ativo      Int  
-  end_cep        String
-  end_rua        String
-  end_num        String
-  end_bairro     String
-  end_cidade     String
-  end_uf         String
-  end_complemento String?
-  usuario        Usuario   @relation(fields: [usu_cpf], references: [usu_cpf])
+  end_cep          String
+  end_rua          String
+  end_num          String
+  end_bairro       String
+  end_cidade       String
+  end_uf           String
+  end_complemento  String?
+  end_id           Int      @id @unique @default(autoincrement())
+  usu_cpf          String
+  end_dtCriado     DateTime   @default(now())
+  end_dtModificado DateTime?  @updatedAt
+  end_ativo        Boolean?
+  usuario          Usuario  @relation(fields: [usu_cpf], references: [usu_cpf])
 }
 
 model Conta {
-  usu_cpf String       @id @unique
-  con_id       Int          @default(autoincrement()) @unique
-  con_num      String
-  con_tipo     String
-  con_extrato  Float
-  con_senha    Int 
-  usuario      Usuario      @relation(fields: [usu_cpf], references: [usu_cpf])
-  agencia      Agencia?
-  transferenciasRemetente   Transferencia[] @relation("Remetente")
+  con_id                     Int             @unique @default(autoincrement())
+  con_num                    String
+  con_tipo                   String
+  con_extrato                Float
+  con_senha                  Int
+  usu_cpf                    String          @id @unique
+  agencia                    Agencia?
+  usuario                    Usuario         @relation(fields: [usu_cpf], references: [usu_cpf])
   transferenciasDestinatario Transferencia[] @relation("Destinatario")
+  transferenciasRemetente    Transferencia[] @relation("Remetente")
 }
 
 model Agencia {
-  con_id    Int    @unique
-  age_num   BigInt
-  age_nome  String @id @unique
-  conta     Conta? @relation(fields: [con_id], references: [con_id])
+  con_id   Int    @unique
+  age_num  BigInt
+  age_nome String @id @unique
+  conta    Conta  @relation(fields: [con_id], references: [con_id])
 }
 
 model Transferencia {
-  trans_id         Int      @id @unique @default(autoincrement())
-  trans_remetente  Int
+  trans_id           Int      @id @unique @default(autoincrement())
+  trans_remetente    Int
   trans_destinatario Int
-  trans_val        Float
-  trans_dtTrans    DateTime
-  trans_descricao  String
-  remetente        Conta    @relation("Remetente", fields: [trans_remetente], references: [con_id])
-  destinatario     Conta    @relation("Destinatario", fields: [trans_destinatario], references: [con_id])
+  trans_val          Float
+  trans_dtTrans      DateTime
+  trans_descricao    String
+  destinatario       Conta    @relation("Destinatario", fields: [trans_destinatario], references: [con_id])
+  remetente          Conta    @relation("Remetente", fields: [trans_remetente], references: [con_id])
 }
