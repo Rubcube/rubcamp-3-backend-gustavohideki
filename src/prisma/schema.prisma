@@ -44,7 +44,7 @@ model Conta {
   con_num      String
   con_tipo     String
   con_extrato  Float
-  con_senha    Int
+  con_senha    Int 
   usuario      Usuario      @relation(fields: [usu_cadastro], references: [usu_cadastro])
   agencia      Agencia?
   transferenciasRemetente   Transferencia[] @relation("Remetente")
