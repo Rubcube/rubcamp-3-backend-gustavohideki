@@ -14,7 +14,7 @@ datasource db {
 
 
 model Usuario {
-  usu_cadastro String   @id @unique 
+  usu_cpf      String   @id @unique 
   usu_nome     String
   usu_email    String
   usu_telefone String
@@ -26,7 +26,7 @@ model Usuario {
 
 model Endereco {
   end_id         Int       @id @unique @default(autoincrement())
-  usu_cadastro   String
+  usu_cpf   String
   end_ativo      Int  
   end_cep        String
   end_rua        String
@@ -35,17 +35,17 @@ model Endereco {
   end_cidade     String
   end_uf         String
   end_complemento String?
-  usuario        Usuario   @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  usuario        Usuario   @relation(fields: [usu_cpf], references: [usu_cpf])
 }
 
 model Conta {
-  usu_cadastro String       @id @unique
+  usu_cpf String       @id @unique
   con_id       Int          @default(autoincrement()) @unique
   con_num      String
   con_tipo     String
   con_extrato  Float
   con_senha    Int 
-  usuario      Usuario      @relation(fields: [usu_cadastro], references: [usu_cadastro])
+  usuario      Usuario      @relation(fields: [usu_cpf], references: [usu_cpf])
   agencia      Agencia?
   transferenciasRemetente   Transferencia[] @relation("Remetente")
   transferenciasDestinatario Transferencia[] @relation("Destinatario")
