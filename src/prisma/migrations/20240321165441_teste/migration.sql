@@ -86,7 +86,7 @@ CREATE TABLE "Conta" (
 -- CreateTable
 CREATE TABLE "Agencia" (
     "con_id" INTEGER NOT NULL,
-    "age_num" BIGINT NOT NULL,
+    "age_num" INT NOT NULL,
     "age_nome" TEXT NOT NULL,
 
     CONSTRAINT "Agencia_pkey" PRIMARY KEY ("age_nome")

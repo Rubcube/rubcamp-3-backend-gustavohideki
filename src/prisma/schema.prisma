@@ -51,7 +51,7 @@ model Conta {
 
 model Agencia {
   con_id   Int    @unique
-  age_num  BigInt
+  age_num  String
   age_nome String @id @unique
   conta    Conta  @relation(fields: [con_id], references: [con_id])
 }
