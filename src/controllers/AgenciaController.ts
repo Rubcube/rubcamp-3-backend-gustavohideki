@@ -16,10 +16,10 @@ export default class AgenciaController {
             const novaAgencia: Agencia = await agenciaModelo.criar(agencia);
             res.status(201).json(novaAgencia);
         } catch (e) {
-            console.log("Não foi possível criar uma conta", e);
+            console.log("Não foi possível criar uma agencia", e);
             res.status(500).send({
                 error: "USR-01",
-                message: "Não foi possível criar uma conta"
+                message: "Não foi possível criar uma agencia"
             })
         }
     };
@@ -48,52 +48,52 @@ export default class AgenciaController {
 
     buscarTodos = async (req: Request, res: Response) => {
         try {
-            const conta: Conta[] | null = await contaModelo.buscarTodos();
-            res.status(200).json(conta);
+            const agencia: Agencia[] | null = await agenciaModelo.buscarTodos();
+            res.status(200).json(agencia);
         } catch (e) {
-            console.log("Não foi possível buscar todas as contas", e);
+            console.log("Não foi possível buscar todas as agencias", e);
             res.status(500).send({
                 error: "USR-03",
-                message: "Não foi possível buscar todas as contas",
+                message: "Não foi possível buscar todas as agencias",
             });
         }
     }
 
     atualizar = async (req: Request, res: Response) => {
         try {
-            const con_id: number = parseInt(req.params.con_id);
-            const alterarConta: Conta = req.body;
-            const contaAlerada: Conta | null = await contaModelo.alterar(
-                con_id,
-                alterarConta
+            const age_nome: string = req.params.age_nome;
+            const alterarAgencia: Agencia = req.body;
+            const agenciaAlterada: Agencia | null = await agenciaModelo.alterar(
+                age_nome,
+                alterarAgencia
             );
-            if (contaAlerada) {
-                res.status(200).json(contaAlerada);
+            if (agenciaAlterada) {
+                res.status(200).json(agenciaAlterada);
             } else {
                 res.status(404).json({
                     error: "USR-06",
-                    message: "Conta não encontrada.",
+                    message: "Agencia não encontrada.",
                   });
             }
         } catch (e) {
-            console.log("Não foi possível alterar a conta", e);
+            console.log("Não foi possível alterar a agencia", e);
             res.status(500).send({
               error: "USR-04",
-              message: "Não foi possível alterar a conta",
+              message: "Não foi possível alterar a agencia",
             });
           }
         }
 
     excluir = async (req: Request, res: Response) => {
         try {
-            const con_id: number = parseInt(req.params.con_id);
-            const contaExcluida = await contaModelo.excluir(con_id);
-            res.status(204).json(contaExcluida);
+            const age_nome: string = req.params.age_nome;
+            const agenciaExcluida = await agenciaModelo.excluir(age_nome);
+            res.status(204).json(agenciaExcluida);
         } catch (e) {
-            console.log("Não foi possível excluir a conta", e);
+            console.log("Não foi possível excluir a agencia", e);
             res.status(500).send({
               error: "USR-05",
-              message: "Não foi possível excluir a conta",
+              message: "Não foi possível excluir a agencia",
             });
         }
     };

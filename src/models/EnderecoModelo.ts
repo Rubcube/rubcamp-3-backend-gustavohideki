@@ -23,7 +23,7 @@ export default class EnderecoModelo {
         })
     }
 
-    apagar = async (end_id: number) => {
+    excluir = async (end_id: number) => {
         return await prisma.endereco.delete({
             where:{
                 end_id
