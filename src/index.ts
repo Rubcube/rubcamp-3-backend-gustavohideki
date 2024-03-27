@@ -15,4 +15,3 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/usuario", authentication, UsuarioRotas);
 app.listen(process.env.PORT || 3344);
 
-///^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gm
